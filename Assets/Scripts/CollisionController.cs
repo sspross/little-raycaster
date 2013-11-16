@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LittleRaycaster : MonoBehaviour {
+public class CollisionController : MonoBehaviour {
 
-	public float fuzzyEdgeFactor = 0.01f;  // if 0 edge on edge connection would set two blocks true
 	public bool blockedRight, blockedLeft, blockedUp, blockedDown = false;
-	public bool showRaycasts = false;
+
+	float fuzzyEdgeFactor = 0.01f;  // if 0 edge on edge connection would set two blocks true
+	float fuzzySkinFactor = 1.1f;
+	bool showRaycasts = true;
 
 	float halfSelf, edgeCorrection;
 	Vector3 selfTop, selfBottom, selfRight, selfLeft;
@@ -39,10 +41,10 @@ public class LittleRaycaster : MonoBehaviour {
 	void CheckRight() {
 		Vector3 direction = transform.TransformDirection(Vector3.right);
 		if (showRaycasts) {
-			Debug.DrawRay(selfTop, direction * halfSelf, Color.cyan);
-			Debug.DrawRay(selfBottom, direction * halfSelf, Color.cyan);
+			Debug.DrawRay(selfTop, direction * halfSelf * fuzzySkinFactor, Color.cyan);
+			Debug.DrawRay(selfBottom, direction * halfSelf * fuzzySkinFactor, Color.cyan);
 		}
-		if (Physics.Raycast(selfTop, direction, halfSelf) || Physics.Raycast(selfBottom, direction, halfSelf)) {
+		if (Physics.Raycast(selfTop, direction, halfSelf * fuzzySkinFactor) || Physics.Raycast(selfBottom, direction, halfSelf * fuzzySkinFactor)) {
 			blockedRight = true;
 		} else {
 			blockedRight = false;
